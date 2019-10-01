@@ -1,20 +1,23 @@
 package gruutbot
 
 import (
-	"fmt"
 	"github.com/bwmarrin/discordgo"
+	"github.com/sirupsen/logrus"
 	"os"
 	"os/signal"
 	"syscall"
 )
 
-func Start() {
-	token := os.Getenv("GRUUTBOT_TOKEN")
+var logger *logrus.Logger
+
+func Start(config *GruutbotConfig) {
+	logger = config.Logger
+	token := config.Token
 
 	discord, err := discordgo.New("Bot " + token)
 
 	if err != nil {
-		fmt.Println("error creating Discord session,", err)
+		logger.Errorln("Error creating Discord session,", err)
 		return
 	}
 
@@ -24,16 +27,18 @@ func Start() {
 	// Open a websocket connection to Discord and begin listening.
 	err = discord.Open()
 	if err != nil {
-		fmt.Println("error opening connection,", err)
+		logger.Errorln("Error opening connection,", err)
 		return
 	}
 
 	// Wait here until CTRL-C or other term signal is received.
-	fmt.Println("Bot is now running.  Press CTRL-C to exit.")
+	logger.Infoln("Bot is now running.  Press CTRL-C to exit.")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc
 
 	// Cleanly close down the Discord session.
-	discord.Close()
+	if err = discord.Close(); err != nil {
+		logger.Errorln("Error closing connection, ", err)
+	}
 }
