@@ -18,8 +18,8 @@ func Start() {
 		return
 	}
 
-	// Register the messageCreate func as a callback for MessageCreate events.
-	discord.AddHandler(messageCreate)
+	// Register the MessageCreate func as a callback for MessageCreate events.
+	discord.AddHandler(MessageCreate)
 
 	// Open a websocket connection to Discord and begin listening.
 	err = discord.Open()
