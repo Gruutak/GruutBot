@@ -9,25 +9,25 @@ import (
 )
 
 const (
-	BOT_ID = 123456
+	BotId = 123456
 )
 
 func mockSession() *discordgo.Session {
 	dg, _ := discordgo.New()
 	dg.State.User = &discordgo.User{
-		ID:            strconv.Itoa(BOT_ID),
+		ID:            strconv.Itoa(BotId),
 		Email:         "gruutbot@mock.com",
 		Username:      "gruutbot",
 		Discriminator: strconv.Itoa(1000),
 		Bot:           true,
 	}
-	dg.State.User.ID = strconv.Itoa(BOT_ID)
+	dg.State.User.ID = strconv.Itoa(BotId)
 
 	return dg
 }
 func mockAuthor(authorId int) *discordgo.Member {
 	name := "member"
-	roles := []string{}
+	var roles []string
 
 	return &discordgo.Member{
 		GuildID: "1",
@@ -71,12 +71,12 @@ func TestMessageCreate(t *testing.T) {
 	assert.Equal(t, "ping", c)
 
 	message = "ping"
-	v, c = isValidCommand(mockedSession, MockMessage(message, BOT_ID))
+	v, c = isValidCommand(mockedSession, MockMessage(message, BotId))
 	assert.Equal(t, false, v)
 	assert.Equal(t, message, c)
 
 	message = "~ping"
-	v, c = isValidCommand(mockedSession, MockMessage(message, BOT_ID))
+	v, c = isValidCommand(mockedSession, MockMessage(message, BotId))
 	assert.Equal(t, false, v)
 	assert.Equal(t, message, c)
 }
