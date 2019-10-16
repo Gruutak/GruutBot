@@ -29,6 +29,7 @@ func setupLogger() *logrus.Logger {
 
 	return log
 }
+
 func logLevel(logLevel string) logrus.Level {
 	switch logLevel {
 	case "trace":

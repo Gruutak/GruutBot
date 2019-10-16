@@ -1,0 +1,5 @@
+{
+  "PREFIX": "^",
+  "BOT_TOKEN": "",
+  "LOG_LEVEL": "INFO"
+}
