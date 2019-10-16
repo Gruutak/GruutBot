@@ -13,6 +13,6 @@ jobs:
           title-template: '[%branch%]'
           title-prefix-space: true
           uppercase-title: true
-          body-template: '[Link to %branch%](https://github.com/gruutak/gruutbot/tree/%branch%)'
+          body-template: '[Link to branch: %branch%](https://github.com/gruutak/gruutbot/tree/%branch%)'
           body-prefix-newline-count: 2
-          uppercase-body: true
+          uppercase-body: false
