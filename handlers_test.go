@@ -2,6 +2,7 @@ package gruutbot
 
 import (
 	"github.com/bwmarrin/discordgo"
+	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 	"strconv"
 	"testing"
@@ -25,6 +26,7 @@ func mockSession() *discordgo.Session {
 
 	return dg
 }
+
 func mockAuthor(authorId int) *discordgo.Member {
 	name := "member"
 	var roles []string
@@ -43,20 +45,21 @@ func mockAuthor(authorId int) *discordgo.Member {
 	}
 }
 
-
 func MockMessage(content string, authorId int) *discordgo.MessageCreate {
 	return &discordgo.MessageCreate{
 		Message: &discordgo.Message{
-				ID:        "123",
-				ChannelID: "1",
-				Content:   content,
-				Timestamp: discordgo.Timestamp(time.Unix(10000, 0).Format(time.RFC3339)),
-				Author:    mockAuthor(authorId).User,
-			},
+			ID:        "123",
+			ChannelID: "1",
+			Content:   content,
+			Timestamp: discordgo.Timestamp(time.Unix(10000, 0).Format(time.RFC3339)),
+			Author:    mockAuthor(authorId).User,
+		},
 	}
 }
 
 func TestMessageCreate(t *testing.T) {
+	gviper = viper.New()
+	gviper.Set("PREFIX", "~")
 	mockedSession := mockSession()
 
 	message := "ping"
@@ -76,6 +79,16 @@ func TestMessageCreate(t *testing.T) {
 	assert.Equal(t, message, c)
 
 	message = "~ping"
+	v, c = isValidCommand(mockedSession, MockMessage(message, BotId))
+	assert.Equal(t, false, v)
+	assert.Equal(t, message, c)
+
+	message = "^ping"
+	v, c = isValidCommand(mockedSession, MockMessage(message, authorId))
+	assert.Equal(t, false, v)
+	assert.Equal(t, message, c)
+
+	message = "^ping"
 	v, c = isValidCommand(mockedSession, MockMessage(message, BotId))
 	assert.Equal(t, false, v)
 	assert.Equal(t, message, c)
