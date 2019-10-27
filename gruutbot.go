@@ -2,19 +2,15 @@ package gruutbot
 
 import (
 	"github.com/bwmarrin/discordgo"
-	"github.com/sirupsen/logrus"
 	"os"
 	"os/signal"
 	"syscall"
 )
 
-var logger *logrus.Logger
+func Start(config *Config) {
+	parseConfig(config)
 
-func Start(config *GruutbotConfig) {
-	logger = config.Logger
-	token := config.Token
-
-	discord, err := discordgo.New("Bot " + token)
+	discord, err := discordgo.New("Bot " + viper.GetString("BOT_TOKEN"))
 
 	if err != nil {
 		logger.Errorln("Error creating Discord session,", err)
@@ -40,5 +36,21 @@ func Start(config *GruutbotConfig) {
 	// Cleanly close down the Discord session.
 	if err = discord.Close(); err != nil {
 		logger.Errorln("Error closing connection, ", err)
+	}
+}
+
+func parseConfig(config *Config) {
+	if config == nil {
+		config = new(Config)
+	}
+
+	viper := config.Viper
+	if viper == nil {
+		viper = ConfigViper()
+	}
+
+	logger = config.Logger
+	if logger == nil {
+		logger = SetupLogger(viper.GetString("LOG_LEVEL"))
 	}
 }
