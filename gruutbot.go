@@ -10,7 +10,7 @@ import (
 func Start(config *Config) {
 	parseConfig(config)
 
-	discord, err := discordgo.New("Bot " + viper.GetString("BOT_TOKEN"))
+	discord, err := discordgo.New("Bot " + gviper.GetString("BOT_TOKEN"))
 
 	if err != nil {
 		logger.Errorln("Error creating Discord session,", err)
@@ -44,13 +44,13 @@ func parseConfig(config *Config) {
 		config = new(Config)
 	}
 
-	viper := config.Viper
-	if viper == nil {
-		viper = ConfigViper()
+	gviper = config.Viper
+	if gviper == nil {
+		gviper = ConfigViper()
 	}
 
 	logger = config.Logger
 	if logger == nil {
-		logger = SetupLogger(viper.GetString("LOG_LEVEL"))
+		logger = SetupLogger(gviper.GetString("LOG_LEVEL"))
 	}
 }

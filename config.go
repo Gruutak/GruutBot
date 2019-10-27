@@ -11,7 +11,7 @@ var configKeys = map[string]string{
 	"BOT_TOKEN": "",
 }
 
-var viper *v.Viper
+var gviper *v.Viper
 
 type Config struct {
 	Logger *logrus.Logger
@@ -50,8 +50,9 @@ func setViperFiles(vip *v.Viper) {
 	vip.AddConfigPath("/etc/gruutbot/")
 	vip.AddConfigPath("$HOME/.gruutbot")
 	vip.AddConfigPath(".")
+	vip.AddConfigPath("./configs/")
 
-	if err := v.ReadInConfig(); err != nil {
+	if err := vip.ReadInConfig(); err != nil {
 		if _, ok := err.(v.ConfigFileNotFoundError); ok {
 			logrus.Warnln("No config files found.")
 		} else {
