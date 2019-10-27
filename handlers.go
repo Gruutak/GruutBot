@@ -25,9 +25,11 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 func isValidCommand(s *discordgo.Session, m *discordgo.MessageCreate) (bool, string) {
 
-	if m.Author.ID == s.State.User.ID || !strings.HasPrefix(m.Content, "~") {
+	prefix := gviper.GetString("PREFIX")
+
+	if m.Author.ID == s.State.User.ID || !strings.HasPrefix(m.Content, prefix) {
 		return false, m.Content
 	}
 
-	return true, strings.TrimPrefix(m.Content, "~")
+	return true, strings.TrimPrefix(m.Content, prefix)
 }

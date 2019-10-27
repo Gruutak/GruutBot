@@ -28,7 +28,8 @@ func Start(config *Config) {
 	}
 
 	// Wait here until CTRL-C or other term signal is received.
-	logger.Infoln("Bot is now running.  Press CTRL-C to exit.")
+	logger.Infof("Bot is now running and listening to commands prefixed with \"%s\".\n", gviper.GetString("PREFIX"))
+	logger.Infoln("Press CTRL-C to exit.")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc

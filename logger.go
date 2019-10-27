@@ -3,11 +3,13 @@ package gruutbot
 import (
 	"github.com/sirupsen/logrus"
 	"os"
+	"strings"
 )
 
 var logger *logrus.Logger
 
 func SetupLogger(level string) *logrus.Logger {
+	level = strings.ToLower(level)
 	var log = logrus.New()
 	log.Out = os.Stdout
 	log.SetFormatter(&logrus.TextFormatter{
