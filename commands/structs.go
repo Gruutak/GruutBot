@@ -16,6 +16,7 @@ type CommandManager struct {
 
 type Command struct {
 	Name        string
+	ArgsFormat  string
 	Description string
 	Aliases     []string
 	Category    CategoryType

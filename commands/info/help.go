@@ -12,7 +12,7 @@ import (
 func init() {
 	cm := commands.Manager()
 
-	ic := &commands.Command{
+	hc := &commands.Command{
 		Name:        "help",
 		Description: "Shows this list of commands",
 		Category:    commands.InfoCategory,
@@ -21,14 +21,14 @@ func init() {
 		Intent:      discordgo.IntentsGuildMessages,
 	}
 
-	cm.Register(ic)
+	cm.Register(hc)
 }
 
 const helpTemplate = "```md\n" +
 	"{{range $val := .}}" +
 	"# {{$val.Name}}\n" +
 	"{{range $command := $val.Commands}}" +
-	"* {{$command.Name}}\n" +
+	"* {{$command.Name}} {{$command.ArgsFormat}}\n" +
 	"> {{$command.Description}}\n" +
 	"{{end}}\n" +
 	"{{end}}" +

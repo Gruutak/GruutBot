@@ -14,7 +14,7 @@ const urlFormat = "https://discord.com/api/oauth2/authorize?client_id=%s&permiss
 func init() {
 	cm := commands.Manager()
 
-	pc := &commands.Command{
+	ic := &commands.Command{
 		Name:        "invite",
 		Description: "Shows the invite link for the bot",
 		Category:    commands.InfoCategory,
@@ -23,7 +23,7 @@ func init() {
 		Intent:      discordgo.IntentsGuildMessages,
 	}
 
-	cm.Register(pc)
+	cm.Register(ic)
 }
 
 func RunInvite(s *discordgo.Session, m *discordgo.MessageCreate, args ...string) (err error) {

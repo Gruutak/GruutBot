@@ -35,7 +35,7 @@ const runTemplate = "```md\n" +
 func init() {
 	cm := commands.Manager()
 
-	pc := &commands.Command{
+	ic := &commands.Command{
 		Name:        "info",
 		Description: "Shows information about the bot",
 		Category:    commands.InfoCategory,
@@ -44,7 +44,7 @@ func init() {
 		Intent:      discordgo.IntentsGuildMessages,
 	}
 
-	cm.Register(pc)
+	cm.Register(ic)
 }
 
 func RunInfo(s *discordgo.Session, m *discordgo.MessageCreate, args ...string) (err error) {
