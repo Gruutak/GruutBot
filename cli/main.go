@@ -13,6 +13,9 @@ import (
 	"github.com/gruutak/gruutbot/commands"
 	"github.com/gruutak/gruutbot/config"
 	"github.com/gruutak/gruutbot/handlers"
+
+	_ "github.com/gruutak/gruutbot/commands/info"
+	_ "github.com/gruutak/gruutbot/commands/useful"
 )
 
 func main() {
@@ -27,7 +30,10 @@ func main() {
 
 	handlers.InjectHandlers(dg)
 
-	dg.Identify.Intents = commands.Manager().Intent
+	cm := commands.Manager()
+	cm.ProcessQueue()
+
+	dg.Identify.Intents = cm.Intent
 
 	// Open a websocket connection to Discord and begin listening.
 	err = dg.Open()

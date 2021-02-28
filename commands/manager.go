@@ -16,6 +16,7 @@ func init() {
 	}
 
 	cm = &CommandManager{
+		queue:      []*Command{},
 		commands:   make(map[string]*Command),
 		aliases:    make(map[string]string),
 		categories: categoryMap,
@@ -26,6 +27,9 @@ func Manager() *CommandManager {
 	return cm
 }
 
+func (cm *CommandManager) AddToRegistrationQueue(command *Command) {
+	cm.queue = append(cm.queue, command)
+}
 func (cm *CommandManager) Register(command *Command) {
 	commandString := command.Name
 
@@ -41,7 +45,10 @@ func (cm *CommandManager) Register(command *Command) {
 
 	if err := cm.categories[command.Category].AddCommand(command); err != nil {
 		log.Error(err)
+		return
 	}
+
+	log.Info("Registered command ", command.Name)
 
 	cm.registerAliases(command)
 }
@@ -79,4 +86,10 @@ func (cm *CommandManager) Categories() map[CategoryType]*Category {
 
 func (cm *CommandManager) Commands() map[string]*Command {
 	return cm.commands
+}
+
+func (cm *CommandManager) ProcessQueue() {
+	for _, c := range cm.queue {
+		cm.Register(c)
+	}
 }

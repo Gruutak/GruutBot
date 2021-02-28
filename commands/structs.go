@@ -8,6 +8,7 @@ import (
 )
 
 type CommandManager struct {
+	queue      []*Command
 	commands   map[string]*Command
 	aliases    map[string]string
 	categories map[CategoryType]*Category

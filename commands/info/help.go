@@ -21,7 +21,7 @@ func init() {
 		Intent:      discordgo.IntentsGuildMessages,
 	}
 
-	cm.Register(hc)
+	cm.AddToRegistrationQueue(hc)
 }
 
 const helpTemplate = `{{$blockQuote := "` + "```" + `"}}

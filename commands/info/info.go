@@ -46,7 +46,7 @@ func init() {
 		Intent:      discordgo.IntentsGuildMessages,
 	}
 
-	cm.Register(ic)
+	cm.AddToRegistrationQueue(ic)
 }
 
 func RunInfo(s *discordgo.Session, m *discordgo.MessageCreate, args ...string) (err error) {

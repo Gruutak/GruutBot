@@ -9,8 +9,6 @@ import (
 
 	"github.com/gruutak/gruutbot/commands"
 	"github.com/gruutak/gruutbot/config"
-
-	_ "github.com/gruutak/gruutbot/commands/info"
 )
 
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
@@ -34,6 +32,10 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	cm := commands.Manager()
 
 	command := cm.Command(args[0])
+
+	if command == nil {
+		return
+	}
 
 	if err := command.Run(s, m, args...); err != nil {
 		log.Error(err)
