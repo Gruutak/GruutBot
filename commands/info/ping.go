@@ -13,12 +13,13 @@ func init() {
 	cm := commands.Manager()
 
 	pc := &commands.Command{
-		Name:     "ping",
-		Category: commands.InfoCategory,
-		Command:  "ping",
-		Aliases:  []string{"pong"},
-		Run:      RunPing,
-		Intent:   discordgo.IntentsGuildMessages,
+		Name:        "ping",
+		Description: "Pong!",
+		Category:    commands.InfoCategory,
+		Command:     "ping",
+		Aliases:     []string{"pong"},
+		Run:         RunPing,
+		Intent:      discordgo.IntentsGuildMessages,
 	}
 
 	cm.Register(pc)

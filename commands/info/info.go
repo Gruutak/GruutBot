@@ -36,12 +36,13 @@ func init() {
 	cm := commands.Manager()
 
 	pc := &commands.Command{
-		Name:     "info",
-		Category: commands.InfoCategory,
-		Command:  "info",
-		Aliases:  []string{},
-		Run:      RunInfo,
-		Intent:   discordgo.IntentsGuildMessages,
+		Name:        "info",
+		Description: "Shows information about the bot",
+		Category:    commands.InfoCategory,
+		Command:     "info",
+		Aliases:     []string{},
+		Run:         RunInfo,
+		Intent:      discordgo.IntentsGuildMessages,
 	}
 
 	cm.Register(pc)

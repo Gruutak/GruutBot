@@ -10,10 +10,11 @@ type CommandManager struct {
 }
 
 type Command struct {
-	Name     string
-	Command  string
-	Aliases  []string
-	Category Category
-	Run      func(*discordgo.Session, *discordgo.MessageCreate, ...string) error
-	Intent   discordgo.Intent
+	Name        string
+	Command     string
+	Description string
+	Aliases     []string
+	Category    Category
+	Run         func(*discordgo.Session, *discordgo.MessageCreate, ...string) error
+	Intent      discordgo.Intent
 }
