@@ -14,7 +14,7 @@ import (
 	"github.com/gruutak/gruutbot/config"
 )
 
-const text = "```md\n" +
+const runTemplate = "```md\n" +
 	"{{.title}}\n" +
 	"{{.titleDashes}}\n" +
 	"> Gruutbut created by Gruutak#3335\n" +
@@ -39,7 +39,6 @@ func init() {
 		Name:        "info",
 		Description: "Shows information about the bot",
 		Category:    commands.InfoCategory,
-		Command:     "info",
 		Aliases:     []string{},
 		Run:         RunInfo,
 		Intent:      discordgo.IntentsGuildMessages,
@@ -78,7 +77,7 @@ func RunInfo(s *discordgo.Session, m *discordgo.MessageCreate, args ...string) (
 		"prefix":        viper.GetString(config.PREFIX),
 	}
 
-	t := template.Must(template.New("").Parse(text))
+	t := template.Must(template.New("").Parse(runTemplate))
 
 	var response bytes.Buffer
 

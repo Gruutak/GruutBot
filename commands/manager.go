@@ -7,10 +7,18 @@ import (
 var cm *CommandManager
 
 func init() {
+	categories := emptyCategories()
+
+	categoryMap := map[CategoryType]*Category{}
+
+	for _, c := range categories {
+		categoryMap[c.Type] = c
+	}
+
 	cm = &CommandManager{
 		commands:   make(map[string]*Command),
 		aliases:    make(map[string]string),
-		categories: make(map[Category]string),
+		categories: categoryMap,
 	}
 }
 
@@ -19,24 +27,27 @@ func Manager() *CommandManager {
 }
 
 func (cm *CommandManager) Register(command *Command) {
-	commandString := command.Command
+	commandString := command.Name
 
 	c := cm.commands[commandString]
 
 	if c != nil {
-		log.Error("Command string already registered: ", commandString)
+		log.Error("Name string already registered: ", commandString)
 		return
 	}
 
 	cm.commands[commandString] = command
-	cm.categories[command.Category] = commandString
 	cm.Intent = cm.Intent | command.Intent
+
+	if err := cm.categories[command.Category].AddCommand(command); err != nil {
+		log.Error(err)
+	}
 
 	cm.registerAliases(command)
 }
 
 func (cm *CommandManager) registerAliases(command *Command) {
-	commandString := command.Command
+	commandString := command.Name
 
 	cm.aliases[commandString] = commandString
 
@@ -44,7 +55,7 @@ func (cm *CommandManager) registerAliases(command *Command) {
 		c := cm.aliases[commandAlias]
 
 		if len(c) > 0 {
-			log.Error("Command aliases already registered: ", commandAlias)
+			log.Error("Name aliases already registered: ", commandAlias)
 			continue
 		}
 
@@ -60,4 +71,12 @@ func (cm *CommandManager) Command(alias string) (command *Command) {
 	}
 
 	return
+}
+
+func (cm *CommandManager) Categories() map[CategoryType]*Category {
+	return cm.categories
+}
+
+func (cm *CommandManager) Commands() map[string]*Command {
+	return cm.commands
 }
