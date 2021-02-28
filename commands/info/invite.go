@@ -30,7 +30,9 @@ func RunInvite(s *discordgo.Session, m *discordgo.MessageCreate, args ...string)
 
 	url := fmt.Sprintf(urlFormat, s.State.User.ID, permissions)
 
-	_, err = s.ChannelMessageSendReply(m.ChannelID, url, m.MessageReference)
+	response := fmt.Sprintf("<@%s> You can invite the bot to your guild using the following url: %s", m.Author.ID, url)
+
+	_, err = s.ChannelMessageSend(m.ChannelID, response)
 
 	return
 }
