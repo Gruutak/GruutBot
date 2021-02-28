@@ -24,15 +24,14 @@ func init() {
 	cm.Register(hc)
 }
 
-const helpTemplate = "```md\n" +
-	"{{range $val := .}}" +
-	"# {{$val.Name}}\n" +
-	"{{range $command := $val.Commands}}" +
-	"* {{$command.Name}} {{$command.ArgsFormat}}\n" +
-	"> {{$command.Description}}\n" +
-	"{{end}}\n" +
-	"{{end}}" +
-	"```"
+const helpTemplate = `{{$blockQuote := "` + "```" + `"}}
+{{$blockQuote}}md
+{{range $val := .}}# {{$val.Name}} 
+{{range $command := $val.Commands}}* {{$command.Name}} {{$command.ArgsFormat}}
+> {{$command.Description}}
+{{end}}
+{{end}}
+{{$blockQuote}}`
 
 func RunHelp(s *discordgo.Session, m *discordgo.MessageCreate, args ...string) (err error) {
 	cm := commands.Manager()
