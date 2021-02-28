@@ -5,7 +5,7 @@ import "github.com/spf13/viper"
 func setupDefaults() {
 	// Bot
 	viper.SetDefault(NAME, "GruutBot")
-	viper.SetDefault(TOKEN, "MzE1MTc1ODYyMTQ2MTcwODgx.WR8oZQ.iR7ho5Qvdh1Js_TFf9g1cXT6Kl0")
+	viper.SetDefault(TOKEN, "")
 	viper.SetDefault(PREFIX, "^")
 
 	// Log
