@@ -14,23 +14,25 @@ import (
 	"github.com/gruutak/gruutbot/config"
 )
 
-const runTemplate = "```md\n" +
-	"{{.title}}\n" +
-	"{{.titleDashes}}\n" +
-	"> Gruutbut created by Gruutak#3335\n" +
-	"\n" +
-	"# Uptime\n" +
-	"< {{.uptime}} >\n\n" +
-	"# Shards\n" +
-	"< {{.shards}} >\n\n" +
-	"# Guilds per shard \n" +
-	"< {{.guilds}} >\n\n" +
-	"# Users per shard \n" +
-	"< {{.users}} >\n\n" +
-	"# Channels per shard\n" +
-	"< {{.channelsCount}} >\n\n" +
-	"Use {{.prefix}}help to see the command list." +
-	"```"
+const runTemplate = `{{$blockQuote := "` + "```" + `"}}
+{{$blockQuote}}md
+{{.title}}
+{{.titleDashes}}
+> Gruutbot created by Gruutak#3335
+
+# Uptime
+< {{.uptime}} >
+# Shards
+< {{.shards}} >
+# Guilds per shard 
+< {{.guilds}} >
+# Users per shard 
+< {{.users}} >
+# Channels per shard
+< {{.channelsCount}} >
+
+Use {{.prefix}}help to see the command list.
+{{$blockQuote}}`
 
 func init() {
 	cm := commands.Manager()
