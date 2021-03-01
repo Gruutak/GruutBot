@@ -19,8 +19,10 @@ type Command struct {
 	Name        string
 	ArgsFormat  string
 	Description string
+	Help        string
 	Aliases     []string
 	Category    CategoryType
+	Initialize  func(*Command) error
 	Run         func(*discordgo.Session, *discordgo.MessageCreate, ...string) error
 	Intent      discordgo.Intent
 }

@@ -30,7 +30,14 @@ func Manager() *CommandManager {
 func (cm *CommandManager) AddToRegistrationQueue(command *Command) {
 	cm.queue = append(cm.queue, command)
 }
-func (cm *CommandManager) Register(command *Command) {
+func (cm *CommandManager) register(command *Command) {
+	if command.Initialize != nil {
+		if err := command.Initialize(command); err != nil {
+			log.Error(err)
+			return
+		}
+	}
+
 	commandString := command.Name
 
 	c := cm.commands[commandString]
@@ -90,6 +97,6 @@ func (cm *CommandManager) Commands() map[string]*Command {
 
 func (cm *CommandManager) ProcessQueue() {
 	for _, c := range cm.queue {
-		cm.Register(c)
+		cm.register(c)
 	}
 }

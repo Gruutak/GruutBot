@@ -16,6 +16,7 @@ func init() {
 		Name:        "decide",
 		Description: "Decide between options",
 		ArgsFormat:  "<option1> <option2> ... <optionN>",
+		Help:        "This command will pick 1 of the options you provided randomly",
 		Category:    commands.UsefulCategory,
 		Aliases:     []string{},
 		Run:         RunDecide,
