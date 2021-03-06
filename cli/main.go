@@ -14,8 +14,8 @@ import (
 	"github.com/gruutak/gruutbot/config"
 	"github.com/gruutak/gruutbot/handlers"
 
+	_ "github.com/gruutak/gruutbot/commands/fun"
 	_ "github.com/gruutak/gruutbot/commands/info"
-	_ "github.com/gruutak/gruutbot/commands/useful"
 )
 
 func main() {

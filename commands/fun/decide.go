@@ -1,4 +1,4 @@
-package useful
+package fun
 
 import (
 	"fmt"
@@ -17,7 +17,7 @@ func init() {
 		Description: "Decide between options",
 		ArgsFormat:  "<option1> <option2> ... <optionN>",
 		Help:        "This command will pick 1 of the options you provided randomly",
-		Category:    commands.UsefulCategory,
+		Category:    commands.FunCategory,
 		Aliases:     []string{},
 		Run:         RunDecide,
 		Intent:      discordgo.IntentsGuildMessages,

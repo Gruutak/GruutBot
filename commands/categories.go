@@ -3,10 +3,10 @@ package commands
 type CategoryType string
 
 const (
-	InfoCategory   CategoryType = "info"
-	AdminCategory  CategoryType = "admin"
-	AudioCategory  CategoryType = "audio"
-	UsefulCategory CategoryType = "useful"
+	AdminCategory CategoryType = "admin"
+	AudioCategory CategoryType = "audio"
+	FunCategory   CategoryType = "fun"
+	InfoCategory  CategoryType = "info"
 )
 
 func emptyCategories() (categories []*Category) {
@@ -26,8 +26,8 @@ func emptyCategories() (categories []*Category) {
 		Commands: []*Command{},
 	})
 	categories = append(categories, &Category{
-		Name:     string(UsefulCategory),
-		Type:     UsefulCategory,
+		Name:     string(FunCategory),
+		Type:     FunCategory,
 		Commands: []*Command{},
 	})
 
