@@ -35,12 +35,9 @@ func RunDecide(s *discordgo.Session, m *discordgo.MessageCreate, args ...string)
 
 	options := args[1:]
 
-	min := 0
-	max := len(options)
-
 	rand.Seed(time.Now().UnixNano())
 
-	decided := rand.Intn(max-min+1) + min
+	decided := rand.Intn(len(options))
 	response := fmt.Sprintf("<@%s> You should go with `%s`", m.Author.ID, options[decided])
 
 	_, err = s.ChannelMessageSend(m.ChannelID, response)
