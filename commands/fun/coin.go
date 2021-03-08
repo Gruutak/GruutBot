@@ -24,7 +24,7 @@ func init() {
 		Name:        "coin",
 		Description: "Flips a coin!",
 		Category:    commands.FunCategory,
-		Aliases:     []string{"coin"},
+		Aliases:     []string{},
 		Run:         RunCoin,
 		Intent:      discordgo.IntentsGuildMessages,
 	}

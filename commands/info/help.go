@@ -66,7 +66,7 @@ func RunHelp(s *discordgo.Session, m *discordgo.MessageCreate, args ...string) (
 				"help <command>` to find out more about that command.",
 			Footer: &discordgo.MessageEmbedFooter{
 				IconURL: s.State.User.AvatarURL(""),
-				Text:    viper.GetString(config.NAME),
+				Text:    s.State.User.Username,
 			},
 		}
 	}
@@ -167,7 +167,7 @@ func commandHelp(s *discordgo.Session, cm *commands.CommandManager, args ...stri
 		Fields:      fields,
 		Footer: &discordgo.MessageEmbedFooter{
 			IconURL: s.State.User.AvatarURL(""),
-			Text:    viper.GetString(config.NAME),
+			Text:    s.State.User.Username,
 		},
 	}
 

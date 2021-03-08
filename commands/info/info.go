@@ -18,7 +18,7 @@ const runTemplate = `{{$blockQuote := "` + "```" + `"}}
 {{$blockQuote}}md
 {{.title}}
 {{.titleDashes}}
-> Gruutbot created by Gruutak#3335
+> This bot was created using GruutBot by Gruutak#3335
 
 # Uptime
 < {{.uptime}} >
@@ -50,7 +50,7 @@ func init() {
 }
 
 func RunInfo(s *discordgo.Session, m *discordgo.MessageCreate, args ...string) (err error) {
-	title := "About " + viper.GetString(config.NAME)
+	title := "About " + s.State.User.Username
 	dashesRegex := regexp.MustCompile(".")
 	guilds := len(s.State.Guilds)
 	users := 0
