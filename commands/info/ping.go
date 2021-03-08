@@ -31,11 +31,11 @@ func RunPing(s *discordgo.Session, m *discordgo.MessageCreate, args ...string) (
 	var response string
 
 	if command == "ping" {
-		response = fmt.Sprint("Pong! I mean... ", latency.Truncate(time.Millisecond))
+		response = fmt.Sprintf("%s Pong! I mean... %s", m.Author.ID, latency.Truncate(time.Millisecond))
 	}
 
 	if command == "pong" {
-		response = fmt.Sprint("Ping!")
+		response = fmt.Sprintf("%s Ping!", m.Author.ID)
 	}
 
 	_, err = s.ChannelMessageSend(m.ChannelID, response)
