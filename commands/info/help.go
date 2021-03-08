@@ -47,7 +47,7 @@ func RunHelp(s *discordgo.Session, m *discordgo.MessageCreate, args ...string) (
 	var message *discordgo.MessageEmbed
 
 	if isCommandSpecific {
-		message, err = commandHelp(cm, args...)
+		message, err = commandHelp(s, cm, args...)
 
 		if message == nil {
 			return
@@ -58,12 +58,16 @@ func RunHelp(s *discordgo.Session, m *discordgo.MessageCreate, args ...string) (
 
 		message = &discordgo.MessageEmbed{
 			Color:  3447003,
-			Type:   discordgo.EmbedTypeArticle,
+			Type:   discordgo.EmbedTypeRich,
 			Title:  "Help",
 			Fields: fields,
 			Description: "This is the list of commands that are currently available to use. " +
 				"If you need help with a specific command, you can use `" + viper.GetString(config.PREFIX) +
 				"help <command>` to find out more about that command.",
+			Footer: &discordgo.MessageEmbedFooter{
+				IconURL: s.State.User.AvatarURL(""),
+				Text:    viper.GetString(config.NAME),
+			},
 		}
 	}
 
@@ -130,7 +134,7 @@ func helpResponse(cm *commands.CommandManager) (response []*discordgo.MessageEmb
 	return
 }
 
-func commandHelp(cm *commands.CommandManager, args ...string) (response *discordgo.MessageEmbed, err error) {
+func commandHelp(s *discordgo.Session, cm *commands.CommandManager, args ...string) (response *discordgo.MessageEmbed, err error) {
 	command := cm.Command(args[1])
 
 	if command == nil {
@@ -157,10 +161,14 @@ func commandHelp(cm *commands.CommandManager, args ...string) (response *discord
 
 	response = &discordgo.MessageEmbed{
 		Color:       3447003,
-		Type:        discordgo.EmbedTypeArticle,
+		Type:        discordgo.EmbedTypeRich,
 		Title:       "Help " + viper.GetString(config.PREFIX) + command.Name,
 		Description: message,
 		Fields:      fields,
+		Footer: &discordgo.MessageEmbedFooter{
+			IconURL: s.State.User.AvatarURL(""),
+			Text:    viper.GetString(config.NAME),
+		},
 	}
 
 	return
