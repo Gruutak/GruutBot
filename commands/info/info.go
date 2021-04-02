@@ -1,10 +1,7 @@
 package info
 
 import (
-	"bytes"
-	"regexp"
 	"strconv"
-	"text/template"
 	"time"
 
 	"github.com/bwmarrin/discordgo"
@@ -48,8 +45,29 @@ func init() {
 }
 
 func RunInfo(s *discordgo.Session, i *discordgo.InteractionCreate, options []*discordgo.ApplicationCommandInteractionDataOption) (err error) {
-	title := "About " + s.State.User.Username
-	dashesRegex := regexp.MustCompile(".")
+	err = s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessage,
+		Data: &discordgo.InteractionApplicationCommandResponseData{
+			Embeds: []*discordgo.MessageEmbed{
+				{
+					Color:       3447003,
+					Type:        discordgo.EmbedTypeRich,
+					Title:       "Help",
+					Fields:      infoFields(s),
+					Description: "This bot was created using GruutBot by Gruutak#3335",
+					Footer: &discordgo.MessageEmbedFooter{
+						IconURL: s.State.User.AvatarURL(""),
+						Text:    s.State.User.Username,
+					},
+				},
+			},
+		},
+	})
+
+	return
+}
+
+func infoFields(s *discordgo.Session) []*discordgo.MessageEmbedField {
 	guilds := len(s.State.Guilds)
 	users := 0
 	channelsCount := 0
@@ -66,31 +84,28 @@ func RunInfo(s *discordgo.Session, i *discordgo.InteractionCreate, options []*di
 		}
 	}
 
-	templateInfo := map[string]string{
-		"title":         title,
-		"titleDashes":   dashesRegex.ReplaceAllString(title, "-"),
-		"uptime":        time.Now().Sub(viper.GetTime(config.START_TIME)).Truncate(time.Second).String(),
-		"shards":        strconv.Itoa(s.ShardCount),
-		"guilds":        strconv.Itoa(guilds),
-		"users":         strconv.Itoa(users),
-		"channelsCount": strconv.Itoa(channelsCount),
-		"prefix":        viper.GetString(config.PREFIX),
-	}
-
-	t := template.Must(template.New("").Parse(runTemplate))
-
-	var response bytes.Buffer
-
-	if err = t.Execute(&response, templateInfo); err != nil {
-		return
-	}
-
-	err = s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
-		Type: discordgo.InteractionResponseChannelMessage,
-		Data: &discordgo.InteractionApplicationCommandResponseData{
-			Content: response.String(),
+	fields := []*discordgo.MessageEmbedField{
+		{
+			Name:  "Uptime",
+			Value: time.Now().Sub(viper.GetTime(config.START_TIME)).Truncate(time.Second).String(),
 		},
-	})
+		{
+			Name:  "Shards",
+			Value: strconv.Itoa(s.ShardCount),
+		},
+		{
+			Name:  "Guilds per shard",
+			Value: strconv.Itoa(guilds),
+		},
+		{
+			Name:  "Users per shard ",
+			Value: strconv.Itoa(users),
+		},
+		{
+			Name:  "Channels per shard",
+			Value: strconv.Itoa(channelsCount),
+		},
+	}
 
-	return
+	return fields
 }
