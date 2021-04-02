@@ -1,9 +1,7 @@
 package fun
 
 import (
-	"bytes"
 	_ "embed"
-	"fmt"
 	"math/rand"
 	"time"
 
@@ -36,34 +34,25 @@ func RunCoin(s *discordgo.Session, i *discordgo.InteractionCreate, options []*di
 	rand.Seed(time.Now().UnixNano())
 	decided := rand.Intn(len(sides))
 
-	var file *discordgo.File
+	fileUrl := "https://raw.githubusercontent.com/gruutak/gruutbot/here-we-go-again/commands/fun/coin/"
 
 	if sides[decided] == "heads" {
-		file = &discordgo.File{
-			Name:   "heads.png",
-			Reader: bytes.NewReader(headsFile),
-		}
+		fileUrl = fileUrl + "heads.png"
 	} else {
-		file = &discordgo.File{
-			Name:   "tails.png",
-			Reader: bytes.NewReader(tailsFile),
-		}
+		fileUrl = fileUrl + "tails.png"
 	}
 
 	err = s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionApplicationCommandResponseData{
-			Content: fmt.Sprintf("<@%s> %s", i.Member.User.ID, sides[decided]),
-			Embeds:  []*discordgo.MessageEmbed{{}},
+			Embeds: []*discordgo.MessageEmbed{{
+				Type: discordgo.EmbedTypeImage,
+				Image: &discordgo.MessageEmbedImage{
+					URL: fileUrl,
+				},
+			}},
 		},
 	})
-
-	data := &discordgo.MessageSend{
-		Content: fmt.Sprintf("<@%s> %s", i.Member.User.ID, sides[decided]),
-		File:    file,
-	}
-
-	_, err = s.ChannelMessageSendComplex(i.ChannelID, data)
 
 	return
 }
