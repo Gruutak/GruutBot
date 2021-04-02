@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"container/list"
 	"fmt"
 	"sort"
 
@@ -8,7 +9,7 @@ import (
 )
 
 type CommandManager struct {
-	queue      []*Command
+	queue      *list.List
 	commands   map[string]*Command
 	aliases    map[string]string
 	categories map[CategoryType]*Category

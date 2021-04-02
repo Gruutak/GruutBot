@@ -10,4 +10,6 @@ func InjectHandlers(session *discordgo.Session) {
 
 	session.AddHandler(messageCreate)
 	log.Trace("messageCreate injected...")
+
+	session.AddHandler(ready)
 }

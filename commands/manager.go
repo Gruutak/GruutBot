@@ -1,6 +1,8 @@
 package commands
 
 import (
+	"container/list"
+
 	log "github.com/sirupsen/logrus"
 )
 
@@ -16,7 +18,7 @@ func init() {
 	}
 
 	cm = &CommandManager{
-		queue:      []*Command{},
+		queue:      list.New(),
 		commands:   make(map[string]*Command),
 		aliases:    make(map[string]string),
 		categories: categoryMap,
@@ -28,7 +30,7 @@ func Manager() *CommandManager {
 }
 
 func (cm *CommandManager) AddToRegistrationQueue(command *Command) {
-	cm.queue = append(cm.queue, command)
+	cm.queue.PushBack(command)
 }
 func (cm *CommandManager) register(command *Command) {
 	if command.Initialize != nil {
@@ -96,7 +98,11 @@ func (cm *CommandManager) Commands() map[string]*Command {
 }
 
 func (cm *CommandManager) ProcessQueue() {
-	for _, c := range cm.queue {
-		cm.register(c)
+	for cm.queue.Len() > 0 {
+		element := cm.queue.Front()
+
+		cm.register(element.Value.(*Command))
+
+		cm.queue.Remove(element)
 	}
 }
