@@ -11,6 +11,12 @@ import (
 	"github.com/gruutak/gruutbot/config"
 )
 
+func init() {
+	mu.Lock()
+	handlers = append(handlers, messageCreate)
+	mu.Unlock()
+}
+
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Author.ID == s.State.User.ID {
 		return

@@ -7,8 +7,14 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+func init() {
+	mu.Lock()
+	handlers = append(handlers, ready)
+	mu.Unlock()
+}
+
 func ready(s *discordgo.Session, m *discordgo.Ready) {
-	guildsLen := len(s.State.Guilds)
+	guildsLen := len(m.Guilds)
 
 	var form string
 
