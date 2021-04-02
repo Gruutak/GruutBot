@@ -15,8 +15,6 @@ func init() {
 	pc := &commands.Command{
 		Name:        "ping",
 		Description: "Pong!",
-		Category:    commands.InfoCategory,
-		Aliases:     []string{"pong"},
 		Run:         RunPing,
 		Intent:      discordgo.IntentsGuildMessages,
 	}

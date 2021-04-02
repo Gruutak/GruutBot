@@ -18,10 +18,8 @@ func init() {
 	}
 
 	cm = &CommandManager{
-		queue:      list.New(),
-		commands:   make(map[string]*Command),
-		aliases:    make(map[string]string),
-		categories: categoryMap,
+		queue:    list.New(),
+		commands: make(map[string]*Command),
 	}
 }
 
@@ -52,45 +50,15 @@ func (cm *CommandManager) register(command *Command) {
 	cm.commands[commandString] = command
 	cm.Intent = cm.Intent | command.Intent
 
-	if err := cm.categories[command.Category].AddCommand(command); err != nil {
-		log.Error(err)
-		return
-	}
-
 	log.Info("Registered command ", command.Name)
-
-	cm.registerAliases(command)
 }
 
-func (cm *CommandManager) registerAliases(command *Command) {
-	commandString := command.Name
-
-	cm.aliases[commandString] = commandString
-
-	for _, commandAlias := range command.Aliases {
-		c := cm.aliases[commandAlias]
-
-		if len(c) > 0 {
-			log.Error("Name aliases already registered: ", commandAlias)
-			continue
-		}
-
-		cm.aliases[commandAlias] = commandString
-	}
-}
-
-func (cm *CommandManager) Command(alias string) (command *Command) {
-	commandString := cm.aliases[alias]
-
-	if len(commandString) > 0 {
-		command = cm.commands[commandString]
+func (cm *CommandManager) Command(name string) (command *Command) {
+	if len(name) > 0 {
+		command = cm.commands[name]
 	}
 
 	return
-}
-
-func (cm *CommandManager) Categories() map[CategoryType]*Category {
-	return cm.categories
 }
 
 func (cm *CommandManager) Commands() map[string]*Command {

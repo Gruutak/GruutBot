@@ -17,8 +17,6 @@ func init() {
 	ic := &commands.Command{
 		Name:        "invite",
 		Description: "Shows the invite link for the bot",
-		Category:    commands.InfoCategory,
-		Aliases:     []string{},
 		Run:         RunInvite,
 		Intent:      discordgo.IntentsGuildMessages,
 	}

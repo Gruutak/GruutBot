@@ -40,8 +40,6 @@ func init() {
 	ic := &commands.Command{
 		Name:        "info",
 		Description: "Shows information about the bot",
-		Category:    commands.InfoCategory,
-		Aliases:     []string{},
 		Run:         RunInfo,
 		Intent:      discordgo.IntentsGuildMessages,
 	}

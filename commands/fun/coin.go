@@ -23,8 +23,6 @@ func init() {
 	cc := &commands.Command{
 		Name:        "coin",
 		Description: "Flips a coin!",
-		Category:    commands.FunCategory,
-		Aliases:     []string{},
 		Run:         RunCoin,
 		Intent:      discordgo.IntentsGuildMessages,
 	}
