@@ -30,7 +30,7 @@ func init() {
 	cm.AddToRegistrationQueue(cc)
 }
 
-func RunCoin(s *discordgo.Session, m *discordgo.MessageCreate, args ...string) (err error) {
+func RunCoin(s *discordgo.Session, i *discordgo.InteractionCreate, options []*discordgo.ApplicationCommandInteractionDataOption) (err error) {
 	sides := []string{"heads", "tails"}
 
 	rand.Seed(time.Now().UnixNano())
@@ -50,12 +50,20 @@ func RunCoin(s *discordgo.Session, m *discordgo.MessageCreate, args ...string) (
 		}
 	}
 
+	err = s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionApplicationCommandResponseData{
+			Content: fmt.Sprintf("<@%s> %s", i.Member.User.ID, sides[decided]),
+			Embeds:  []*discordgo.MessageEmbed{{}},
+		},
+	})
+
 	data := &discordgo.MessageSend{
-		Content: fmt.Sprintf("<@%s> %s", m.Author.ID, sides[decided]),
+		Content: fmt.Sprintf("<@%s> %s", i.Member.User.ID, sides[decided]),
 		File:    file,
 	}
 
-	_, err = s.ChannelMessageSendComplex(m.ChannelID, data)
+	_, err = s.ChannelMessageSendComplex(i.ChannelID, data)
 
 	return
 }

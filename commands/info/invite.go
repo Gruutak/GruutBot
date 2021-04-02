@@ -24,13 +24,18 @@ func init() {
 	cm.AddToRegistrationQueue(ic)
 }
 
-func RunInvite(s *discordgo.Session, m *discordgo.MessageCreate, args ...string) (err error) {
+func RunInvite(s *discordgo.Session, i *discordgo.InteractionCreate, options []*discordgo.ApplicationCommandInteractionDataOption) (err error) {
 
 	url := fmt.Sprintf(urlFormat, s.State.User.ID, permissions)
 
-	response := fmt.Sprintf("<@%s> You can invite the bot to your guild using the following url: %s", m.Author.ID, url)
+	response := fmt.Sprintf("You can invite the bot to your guild using the following url: %s", url)
 
-	_, err = s.ChannelMessageSend(m.ChannelID, response)
+	err = s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionApplicationCommandResponseData{
+			Content: response,
+		},
+	})
 
 	return
 }

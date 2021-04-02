@@ -47,7 +47,7 @@ func init() {
 	cm.AddToRegistrationQueue(ic)
 }
 
-func RunInfo(s *discordgo.Session, m *discordgo.MessageCreate, args ...string) (err error) {
+func RunInfo(s *discordgo.Session, i *discordgo.InteractionCreate, options []*discordgo.ApplicationCommandInteractionDataOption) (err error) {
 	title := "About " + s.State.User.Username
 	dashesRegex := regexp.MustCompile(".")
 	guilds := len(s.State.Guilds)
@@ -85,7 +85,12 @@ func RunInfo(s *discordgo.Session, m *discordgo.MessageCreate, args ...string) (
 		return
 	}
 
-	_, err = s.ChannelMessageSend(m.ChannelID, response.String())
+	err = s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessage,
+		Data: &discordgo.InteractionApplicationCommandResponseData{
+			Content: response.String(),
+		},
+	})
 
 	return
 }

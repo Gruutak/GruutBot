@@ -22,21 +22,17 @@ func init() {
 	cm.AddToRegistrationQueue(pc)
 }
 
-func RunPing(s *discordgo.Session, m *discordgo.MessageCreate, args ...string) (err error) {
-	command := args[0]
+func RunPing(s *discordgo.Session, i *discordgo.InteractionCreate, options []*discordgo.ApplicationCommandInteractionDataOption) (err error) {
 	latency := s.HeartbeatLatency()
 
-	var response string
+	response := fmt.Sprintf("Pong! I mean... %s", latency.Truncate(time.Millisecond))
 
-	if command == "ping" {
-		response = fmt.Sprintf("<@%s> Pong! I mean... %s", m.Author.ID, latency.Truncate(time.Millisecond))
-	}
-
-	if command == "pong" {
-		response = fmt.Sprintf("<@%s> Ping!", m.Author.ID)
-	}
-
-	_, err = s.ChannelMessageSend(m.ChannelID, response)
+	err = s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionApplicationCommandResponseData{
+			Content: response,
+		},
+	})
 
 	return
 }

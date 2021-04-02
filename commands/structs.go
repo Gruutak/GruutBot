@@ -9,19 +9,18 @@ import (
 )
 
 type CommandManager struct {
-	queue    *list.List
-	commands map[string]*Command
-	Intent   discordgo.Intent
+	queue               *list.List
+	Intent              discordgo.Intent
+	commands            map[string]*Command
+	applicationCommands []*discordgo.ApplicationCommand
 }
 
 type Command struct {
-	ID          string
 	Name        string
 	Description string
-	Version     string
 	Options     []*discordgo.ApplicationCommandOption
 	Initialize  func(*Command) error
-	Run         func(*discordgo.Session, *discordgo.MessageCreate, ...string) error
+	Run         func(*discordgo.Session, *discordgo.InteractionCreate, []*discordgo.ApplicationCommandInteractionDataOption) error
 	Intent      discordgo.Intent
 }
 

@@ -3,6 +3,7 @@ package fun
 import (
 	"fmt"
 	"math/rand"
+	"strings"
 	"time"
 
 	"github.com/bwmarrin/discordgo"
@@ -14,29 +15,39 @@ func init() {
 
 	uc := &commands.Command{
 		Name:        "decide",
-		Description: "Decide between provided options",
+		Description: "Decide between two alternatives",
 		Run:         RunDecide,
 		Intent:      discordgo.IntentsGuildMessages,
+		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Name:        "Alternative1",
+				Description: "The first alternative to choose from",
+				Type:        discordgo.ApplicationCommandOptionString,
+				Required:    true,
+			},
+			{
+				Name:        "Alternative2",
+				Description: "The second alternative to choose from",
+				Type:        discordgo.ApplicationCommandOptionString,
+				Required:    true,
+			}},
 	}
 
 	cm.AddToRegistrationQueue(uc)
 }
 
-func RunDecide(s *discordgo.Session, m *discordgo.MessageCreate, args ...string) (err error) {
-	if len(args) < 3 {
-		response := fmt.Sprintf("<@%s> You must provide at least 2 options", m.Author.ID)
-		_, err = s.ChannelMessageSend(m.ChannelID, response)
-		return
-	}
-
-	options := args[1:]
-
+func RunDecide(s *discordgo.Session, i *discordgo.InteractionCreate, options []*discordgo.ApplicationCommandInteractionDataOption) (err error) {
 	rand.Seed(time.Now().UnixNano())
 
 	decided := rand.Intn(len(options))
-	response := fmt.Sprintf("<@%s> You should go with `%s`", m.Author.ID, options[decided])
+	response := fmt.Sprintf("You should go with alternative `%s`", strings.TrimSpace(options[decided].StringValue()))
 
-	_, err = s.ChannelMessageSend(m.ChannelID, response)
+	err = s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionApplicationCommandResponseData{
+			Content: response,
+		},
+	})
 
 	return
 }
